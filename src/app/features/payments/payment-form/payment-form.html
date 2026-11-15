@@ -1,0 +1,159 @@
+<div class="payment-container">
+  <div class="payment-card">
+
+    <div class="payment-header">
+      <h2>Make a Payment</h2>
+      <p>Choose your preferred payment method to continue.</p>
+    </div>
+
+    <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+
+      <!-- Amount -->
+      <div class="form-group">
+        <label for="amount">Amount (KES)</label>
+
+        <div class="amount-input">
+          <span>KES</span>
+
+          <input
+            type="number"
+            id="amount"
+            formControlName="amount"
+            placeholder="Enter amount"
+            min="1"
+            step="0.01"
+          />
+        </div>
+
+        @if (
+          paymentForm.get('amount')?.invalid &&
+          paymentForm.get('amount')?.touched
+        ) {
+          <small class="error-message">
+            Please enter an amount of at least KES 1.
+          </small>
+        }
+      </div>
+
+
+      <!-- Payment Method -->
+      <div class="form-group">
+        <label>Payment Method</label>
+
+        <div class="payment-methods">
+
+          <!-- M-Pesa -->
+          <label class="payment-option">
+            <input
+              type="radio"
+              formControlName="paymentMethod"
+              value="MPESA"
+            />
+
+            <span>
+              <strong>M-Pesa</strong>
+              <small>Pay using your mobile phone</small>
+            </span>
+          </label>
+
+
+          <!-- Bank -->
+          <label class="payment-option">
+            <input
+              type="radio"
+              formControlName="paymentMethod"
+              value="BANK"
+            />
+
+            <span>
+              <strong>Bank Transfer</strong>
+              <small>Pay using a bank account</small>
+            </span>
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- M-Pesa Details -->
+      @if (paymentForm.get('paymentMethod')?.value === 'MPESA') {
+
+        <div class="form-group">
+          <label for="phoneNumber">M-Pesa Phone Number</label>
+
+          <input
+            type="tel"
+            id="phoneNumber"
+            formControlName="phoneNumber"
+            placeholder="e.g. 0712345678"
+          />
+
+          <small class="field-hint">
+            Enter the phone number that will receive the M-Pesa payment prompt.
+          </small>
+
+          @if (
+            paymentForm.get('phoneNumber')?.invalid &&
+            paymentForm.get('phoneNumber')?.touched
+          ) {
+            <small class="error-message">
+              Enter a valid Kenyan phone number.
+            </small>
+          }
+        </div>
+
+      }
+
+
+      <!-- Bank Details -->
+      @if (paymentForm.get('paymentMethod')?.value === 'BANK') {
+
+        <div class="form-group">
+          <label for="bank">Select Bank</label>
+
+          <select
+            id="bank"
+            formControlName="bank"
+          >
+            <option value="">Choose a bank</option>
+            <option value="KCB">KCB Bank</option>
+            <option value="EQUITY">Equity Bank</option>
+            <option value="COOP">Co-operative Bank</option>
+            <option value="ABSA">Absa Bank</option>
+          </select>
+        </div>
+
+
+        <div class="form-group">
+          <label for="accountNumber">Account Number</label>
+
+          <input
+            type="text"
+            id="accountNumber"
+            formControlName="accountNumber"
+            placeholder="Enter account number"
+          />
+        </div>
+
+      }
+
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="pay-button"
+        [disabled]="paymentForm.invalid"
+      >
+        Initiate Payment
+      </button>
+
+
+      <!-- Security Note -->
+      <p class="security-note">
+        Your payment details are processed securely.
+      </p>
+
+    </form>
+
+  </div>
+</div>
