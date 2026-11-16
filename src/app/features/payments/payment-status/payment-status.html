@@ -1,1 +1,39 @@
-<p>payment-status works!</p>
+<section class="status-card">
+  @if (error()) {
+    <h2>Something went wrong</h2>
+    <p>{{ error() }}</p>
+  } @else if (payment(); as p) {
+    @switch (p.status) {
+      @case ('PENDING') {
+        <div class="spinner"></div>
+        <h2>Waiting for confirmation</h2>
+        @if (p.method === 'MPESA') {
+          <p>Check your phone and enter your M-Pesa PIN.</p>
+        }
+      }
+      @case ('SUCCESS') {
+        <div class="icon success">✓</div>
+        <h2>Payment successful</h2>
+      }
+      @case ('FAILED') {
+        <div class="icon failed">✕</div>
+        <h2>Payment failed</h2>
+        <p>{{ p.failureReason }}</p>
+      }
+    }
+
+    <dl>
+      <dt>Amount</dt><dd>{{ p.amount | currency: 'KES ' }}</dd>
+      <dt>Method</dt><dd>{{ p.method }}</dd>
+      <dt>Reference</dt><dd>{{ p.reference }}</dd>
+    </dl>
+
+    @if (p.status !== 'PENDING') {
+      <a routerLink="/payment">New payment</a>
+      <a routerLink="/history">View history</a>
+    }
+  } @else {
+    <div class="spinner"></div>
+    <p>Loading…</p>
+  }
+</section>

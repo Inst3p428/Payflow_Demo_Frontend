@@ -137,15 +137,17 @@
 
       }
 
-
+        @if (errorMessage()) {
+            <p class="error-message server-error">{{ errorMessage() }}</p>
+        }
       <!-- Submit -->
-      <button
-        type="submit"
-        class="pay-button"
-        [disabled]="paymentForm.invalid"
-      >
-        Initiate Payment
-      </button>
+        <button
+            type="submit"
+            class="pay-button"
+            [disabled]="paymentForm.invalid || submitting()"
+            >
+            {{ submitting() ? 'Processing…' : 'Initiate Payment' }}
+        </button>
 
 
       <!-- Security Note -->
